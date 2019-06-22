@@ -1,6 +1,8 @@
 import { Component, OnInit } from '@angular/core';
 import { CoreFirebaseService } from 'src/app/services/core-firebase.service';
 import { Avatar } from 'src/app/models/avatar';
+import { Gamer } from 'src/app/models/gamer';
+import { NgForm } from '@angular/forms';
 
 @Component({
   selector: 'app-select-avatar',
@@ -9,7 +11,9 @@ import { Avatar } from 'src/app/models/avatar';
 })
 export class SelectAvatarComponent implements OnInit {
 
+  avatarSelected: Avatar;
   avataList: Avatar[];
+  newGamer: Gamer = new Gamer();
 
   constructor(
     private coreFirebase: CoreFirebaseService
@@ -33,5 +37,14 @@ export class SelectAvatarComponent implements OnInit {
           });
         }
       });
+  }
+
+  onSelectAvatar(avatar: Avatar) {
+    this.avatarSelected = avatar;
+    console.log(avatar);
+  }
+
+  onSubmit(gamerForm: NgForm) {
+    console.log(gamerForm.value);
   }
 }
