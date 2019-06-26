@@ -2,7 +2,9 @@ import { Component, OnInit } from '@angular/core';
 import { CoreFirebaseService } from 'src/app/services/core-firebase.service';
 import { Avatar } from 'src/app/models/avatar';
 import { Gamer } from 'src/app/models/gamer';
-import { NgForm } from '@angular/forms';
+import { Router } from '@angular/router';
+import Swal from 'sweetalert2';
+import { GamerFirebaseService } from 'src/app/services/gamer-firebase.service';
 
 @Component({
   selector: 'app-select-avatar',
@@ -16,7 +18,9 @@ export class SelectAvatarComponent implements OnInit {
   newGamer: Gamer = new Gamer();
 
   constructor(
-    private coreFirebase: CoreFirebaseService
+    private coreFirebase: CoreFirebaseService,
+    private router: Router,
+    private gamerService: GamerFirebaseService,
   ) { }
 
   ngOnInit() {
@@ -41,10 +45,26 @@ export class SelectAvatarComponent implements OnInit {
 
   onSelectAvatar(avatar: Avatar) {
     this.avatarSelected = avatar;
-    console.log(avatar);
-  }
-
-  onSubmit(gamerForm: NgForm) {
-    console.log(gamerForm.value);
+    Swal.fire({
+      title: 'Seleccione un avatar',
+      text: `Esta seguro de escoger ${avatar.name}, una vez realizado no se puede cambiar`,
+      type: 'question',
+      input: 'text',
+      inputAttributes: {
+        autocapitalize: 'off'
+      },
+      showCancelButton: true,
+      // confirmButtonColor: '#3085d6',
+      // cancelButtonColor: '#d33',
+      confirmButtonText: '<i class="fa fa-thumbs-up"></i> Juguemos!',
+      cancelButtonText: '<i class="fa fa-thumbs-down"></i>'
+    }).then((result) => {
+      if (result.value) {
+        this.newGamer.avatar = this.avatarSelected.$key;
+        this.newGamer.nick = result.value;
+        this.gamerService.insertar(this.newGamer);
+        this.router.navigate(['/lobby', this.newGamer.nick]);
+      }
+    });
   }
 }

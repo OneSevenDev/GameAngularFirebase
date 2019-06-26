@@ -1,11 +1,11 @@
 [
-  { "img": "fa-github-alt" },
-  { "img": "fa-bug" },
-  { "img": "fa-reddit-alien" },
-  { "img": "fa-user-secret" },
-  { "img": "fa-gitlab" },
-  { "img": "fa-firefox" },
-  { "img": "fa-drupal" },
-  { "img": "fa-tripadvisor" },
-  { "img": "fa-linux" }
+  { "img": "fa-github-alt", "name": "Gato" },
+  { "img": "fa-bug", "name": "Bicho" },
+  { "img": "fa-reddit-alien", "name": "Alien" },
+  { "img": "fa-user-secret", "name": "Agente Secreto" },
+  { "img": "fa-gitlab", "name": "Fox" },
+  { "img": "fa-firefox", "name": "Fox World" },
+  { "img": "fa-drupal", "name": "Sedalib chevere" },
+  { "img": "fa-tripadvisor", "name": "Buo" },
+  { "img": "fa-linux", "name": "Pingui" }
 ]

@@ -18,24 +18,26 @@ export class CoreFirebaseService {
   ) {
   }
 
-  InsertavatartDefault(): void{
+  InsertavatartDefault(): void {
     const lstAvatar: Avatar[] = this.settings.settingsAvatart();
     lstAvatar.forEach((element) => {
       const avatar: Avatar = new Avatar();
       avatar.img = element.img;
+      avatar.name = element.name;
       avatar.available = true;
       this.insertar(avatar);
     });
   }
 
   getAvatars() {
-    this.avatarList = this.firebase.list('avatars')
+    this.avatarList = this.firebase.list('avatars');
     return this.avatarList;
   }
 
   insertar(model: Avatar) {
     this.avatarList.push({
       img: model.img,
+      name: model.name,
       available: model.available,
     });
   }

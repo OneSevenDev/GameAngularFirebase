@@ -16,13 +16,14 @@ export class GamerFirebaseService {
   }
 
   initialGamers() {
-    this.gamers = this.firebase.list('avatars')
+    this.gamers = this.firebase.list('gamers');
     return this.gamers;
   }
 
   insertar(model: Gamer) {
     this.gamers.push({
-      nick: model.nick
+      nick: model.nick,
+      avatar: model.avatar
     });
   }
 }
