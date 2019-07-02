@@ -1,21 +1,25 @@
 import { Injectable } from '@angular/core';
 
-import { AngularFireDatabase, AngularFireList } from 'angularfire2/database';
+// import { AngularFireDatabase, AngularFireList } from 'angularfire2/database';
 import { Avatar } from '../models/avatar';
+import { Observable } from 'rxjs';
 import { SettingsService } from './app-settings.service';
+import { AngularFireDatabase, AngularFireObject, AngularFireList } from '@angular/fire/database';
 
 @Injectable({
   providedIn: 'root'
 })
 export class CoreFirebaseService {
 
-  private avatarList: AngularFireList<any>;
-  selectAvatar: Avatar = new Avatar();
+  // private avatarList: AngularFireList<any>;
+  // selectAvatar: Avatar = new Avatar();
+  avatarList: AngularFireList<Avatar>;
 
   constructor(
     private firebase: AngularFireDatabase,
     private settings: SettingsService
   ) {
+    this.avatarList = firebase.list<Avatar>('avatars');
   }
 
   InsertavatartDefault(): void {
@@ -29,26 +33,20 @@ export class CoreFirebaseService {
     });
   }
 
-  getAvatars() {
-    this.avatarList = this.firebase.list('avatars');
-    return this.avatarList;
+  listAvatars(): Observable<any> {
+    return this.avatarList.snapshotChanges();
   }
 
   insertar(model: Avatar) {
-    this.avatarList.push({
-      img: model.img,
-      name: model.name,
-      available: model.available,
-    });
+    this.avatarList.push(model);
   }
 
   update(model: Avatar) {
-    this.avatarList.update(model.$key, {
-      gamer: model.gamer
-    });
+    const currentAvatar = this.firebase.object(model.$key);
+    currentAvatar.set(model);
   }
 
-  delete(id: string) {
-    this.avatarList.remove(id);
-  }
+  // delete(id: string) {
+  //   this.avatarList.remove(id);
+  // }
 }

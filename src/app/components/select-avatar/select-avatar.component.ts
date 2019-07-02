@@ -5,6 +5,7 @@ import { Gamer } from 'src/app/models/gamer';
 import { Router } from '@angular/router';
 import Swal from 'sweetalert2';
 import { GamerFirebaseService } from 'src/app/services/gamer-firebase.service';
+import { LobbyFirebaseService } from 'src/app/services/lobby-firebase.service';
 
 @Component({
   selector: 'app-select-avatar',
@@ -21,6 +22,7 @@ export class SelectAvatarComponent implements OnInit {
     private coreFirebase: CoreFirebaseService,
     private router: Router,
     private gamerService: GamerFirebaseService,
+    private lobbyService: LobbyFirebaseService,
   ) { }
 
   ngOnInit() {
@@ -28,19 +30,18 @@ export class SelectAvatarComponent implements OnInit {
   }
 
   loadAvatarts(): void {
-    this.coreFirebase.getAvatars()
-      .snapshotChanges().subscribe(item => {
-        this.avataList = [];
-        if (item.length === 0) {
-          this.coreFirebase.InsertavatartDefault();
-        } else {
-          item.forEach(element => {
-            const genericList = element.payload.toJSON();
-            genericList['$key'] = element.key;
-            this.avataList.push(genericList as Avatar);
-          });
-        }
-      });
+    this.coreFirebase.listAvatars().subscribe(response => {
+      this.avataList = [];
+      if (response.length === 0) {
+        this.coreFirebase.InsertavatartDefault();
+      } else {
+        response.forEach(element => {
+          const genericList = element.payload.toJSON();
+          genericList['$key'] = element.key;
+          this.avataList.push(genericList as Avatar);
+        });
+      }
+    });
   }
 
   onSelectAvatar(avatar: Avatar) {
@@ -62,7 +63,14 @@ export class SelectAvatarComponent implements OnInit {
       if (result.value) {
         this.newGamer.avatar = this.avatarSelected.$key;
         this.newGamer.nick = result.value;
+
         this.gamerService.insertar(this.newGamer);
+
+        this.avatarSelected.available = false;
+        this.coreFirebase.update(this.avatarSelected);
+
+        // this.lobbyService.currentLobby();
+
         this.router.navigate(['/lobby', this.newGamer.nick]);
       }
     });

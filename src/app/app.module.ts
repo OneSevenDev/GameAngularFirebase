@@ -2,8 +2,6 @@ import { BrowserModule } from '@angular/platform-browser';
 import { NgModule } from '@angular/core';
 
 import { AppComponent } from './app.component';
-import { AngularFireDatabaseModule } from 'angularfire2/database';
-import { AngularFireModule } from 'angularfire2';
 import { environment } from '../environments/environment';
 import { FooterComponent } from './components/shared/footer/footer.component';
 import { SelectAvatarComponent } from './components/select-avatar/select-avatar.component';
@@ -13,6 +11,8 @@ import { GamerFirebaseService } from './services/gamer-firebase.service';
 import { FormsModule } from '@angular/forms';
 import { LobbyComponent } from './components/lobby/lobby.component';
 import { Routes, RouterModule } from '@angular/router';
+import { AngularFireModule } from '@angular/fire';
+import { AngularFireDatabaseModule } from '@angular/fire/database';
 
 const routes: Routes = [
   { path: '', redirectTo: '/players', pathMatch: 'full' },

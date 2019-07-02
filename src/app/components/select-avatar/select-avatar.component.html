@@ -3,8 +3,8 @@
   <h2>Selecciona tu avatar</h2>
   <p class="lead">Escoge tu avatar rapido, antes que alguien te gane.</p>
 </div>
-<div class="row py-5 text-center">
-  <div class="col-sm-4" *ngFor="let avatar of avataList">
+<div *ngIf="avataList" class="row py-5 text-center">
+  <div class="col-sm-4" *ngFor="let avatar of avataList"  [ngClass]="{ 'disabled-avatar': !avatar?.available || false }">
       <i class="fa {{avatar.img}} fa-5x design-avatar" data-toggle="modal" data-target="#selectedAvatar" aria-hidden="true" (click)="onSelectAvatar(avatar)"></i>
   </div>
 </div>

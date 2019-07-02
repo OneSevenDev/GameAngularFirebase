@@ -1,3 +1,6 @@
 .design-avatar {
   cursor: pointer;
 }
+.disabled-avatar {
+  color: #b3b3b3;
+}
