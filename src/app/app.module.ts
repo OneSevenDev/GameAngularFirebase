@@ -17,7 +17,7 @@ import { AngularFireDatabaseModule } from '@angular/fire/database';
 const routes: Routes = [
   { path: '', redirectTo: '/players', pathMatch: 'full' },
   { path: 'players', component: SelectAvatarComponent },
-  { path: 'lobby/:nick', component: LobbyComponent },
+  { path: 'lobby/:lobby/:nick', component: LobbyComponent },
   // { path: '**', component: PageNotFoundComponent },
 ];
 

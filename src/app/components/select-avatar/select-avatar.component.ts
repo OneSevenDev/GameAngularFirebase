@@ -58,12 +58,24 @@ export class SelectAvatarComponent implements OnInit {
         this.newGamer.avatar = this.avatarSelected.$key;
         this.newGamer.nick = result.value;
 
-        this.gamerService.insertar(this.newGamer);
+        this.gamerService.insertar(this.newGamer).subscribe(response => {
+          if (response !== '') {
+            this.avatarSelected.available = false;
+            this.coreFirebase.update(this.avatarSelected);
 
-        this.avatarSelected.available = false;
-        this.coreFirebase.update(this.avatarSelected);
+            this.router.navigate(['/lobby', response, this.newGamer.nick]);
 
-        this.router.navigate(['/lobby', this.newGamer.nick]);
+            Swal.mixin({
+              toast: true,
+              position: 'top-end',
+              showConfirmButton: false,
+              timer: 3000
+            }).fire({
+              type: 'success',
+              title: 'Bienvenido !'
+            });
+          }
+        });
       }
     });
   }
