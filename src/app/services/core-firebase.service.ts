@@ -1,6 +1,4 @@
 import { Injectable } from '@angular/core';
-
-// import { AngularFireDatabase, AngularFireList } from 'angularfire2/database';
 import { Avatar } from '../models/avatar';
 import { Observable } from 'rxjs';
 import { SettingsService } from './app-settings.service';
@@ -11,9 +9,7 @@ import { AngularFireDatabase, AngularFireObject, AngularFireList } from '@angula
 })
 export class CoreFirebaseService {
 
-  // private avatarList: AngularFireList<any>;
-  // selectAvatar: Avatar = new Avatar();
-  avatarList: AngularFireList<Avatar>;
+  avatarList: AngularFireList<any>;
 
   constructor(
     private firebase: AngularFireDatabase,
@@ -42,11 +38,10 @@ export class CoreFirebaseService {
   }
 
   update(model: Avatar) {
-    const currentAvatar = this.firebase.object(model.$key);
-    currentAvatar.set(model);
+    this.avatarList.update(model.$key, { available: model.available });
   }
 
-  // delete(id: string) {
-  //   this.avatarList.remove(id);
-  // }
+  delete(model: Avatar) {
+    this.avatarList.remove(model.$key);
+  }
 }

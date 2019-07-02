@@ -35,10 +35,8 @@ export class SelectAvatarComponent implements OnInit {
       if (response.length === 0) {
         this.coreFirebase.InsertavatartDefault();
       } else {
-        response.forEach(element => {
-          const genericList = element.payload.toJSON();
-          genericList['$key'] = element.key;
-          this.avataList.push(genericList as Avatar);
+        this.avataList = response.map(item => {
+          return { $key: item.key, ...item.payload.val() };
         });
       }
     });
@@ -55,8 +53,6 @@ export class SelectAvatarComponent implements OnInit {
         autocapitalize: 'off'
       },
       showCancelButton: true,
-      // confirmButtonColor: '#3085d6',
-      // cancelButtonColor: '#d33',
       confirmButtonText: '<i class="fa fa-thumbs-up"></i> Juguemos!',
       cancelButtonText: '<i class="fa fa-thumbs-down"></i>'
     }).then((result) => {
@@ -68,8 +64,6 @@ export class SelectAvatarComponent implements OnInit {
 
         this.avatarSelected.available = false;
         this.coreFirebase.update(this.avatarSelected);
-
-        // this.lobbyService.currentLobby();
 
         this.router.navigate(['/lobby', this.newGamer.nick]);
       }
