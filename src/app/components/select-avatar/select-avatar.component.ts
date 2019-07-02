@@ -5,7 +5,6 @@ import { Gamer } from 'src/app/models/gamer';
 import { Router } from '@angular/router';
 import Swal from 'sweetalert2';
 import { GamerFirebaseService } from 'src/app/services/gamer-firebase.service';
-import { LobbyFirebaseService } from 'src/app/services/lobby-firebase.service';
 
 @Component({
   selector: 'app-select-avatar',
@@ -22,7 +21,6 @@ export class SelectAvatarComponent implements OnInit {
     private coreFirebase: CoreFirebaseService,
     private router: Router,
     private gamerService: GamerFirebaseService,
-    private lobbyService: LobbyFirebaseService,
   ) { }
 
   ngOnInit() {
@@ -46,7 +44,7 @@ export class SelectAvatarComponent implements OnInit {
     this.avatarSelected = avatar;
     Swal.fire({
       title: 'Seleccione un avatar',
-      text: `Esta seguro de escoger ${avatar.name}, una vez realizado no se puede cambiar`,
+      text: `Esta seguro de escoger ${avatar.name} <i class="fa ${avatar.img}"></i>, una vez realizado no se puede cambiar`,
       type: 'question',
       input: 'text',
       inputAttributes: {

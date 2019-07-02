@@ -1,51 +1,65 @@
 import { Injectable } from '@angular/core';
 import { AngularFireDatabase, AngularFireList } from '@angular/fire/database';
 import { Lobby } from '../models/lobby';
-import { Gamer } from '../models/gamer';
 
 @Injectable({
   providedIn: 'root'
 })
 export class LobbyFirebaseService {
 
-  lobbyList: AngularFireList<any>;
-
-  firstLobby: Lobby = {
-    $key: null,
-    available: true,
-    maxGamer: 2,
-    gamers: null
-  };
+  refLobby: firebase.database.Reference;
 
   constructor(
     private firebase: AngularFireDatabase,
     ) {
-      this.lobbyList = firebase.list<Lobby>('lobbies');
+      this.refLobby = this.firebase.database.ref().child('lobbies');
      }
 
-  connectAvailableLobby(newGamer: Gamer): void {
-    this.lobbyList.snapshotChanges().subscribe(response => {
-      if (response.length === 0) {
-        this.newLobby(newGamer.$key);
-      } else {
-        response.forEach(element => {
-          const genericList = element.payload.toJSON();
-          genericList['$key'] = element.key;
-          const lobby: Lobby = genericList as Lobby;
-
-          if (lobby.gamers.length < lobby.maxGamer) {
-            lobby.gamers.push(newGamer.$key);
-            this.lobbyList.update(lobby.$key, { gamers: lobby.gamers });
+  connectAvailableLobby(keyGamer: string): void {
+    this.refLobby.once('value', snapshot => {
+      if (snapshot.numChildren() > 0) {
+        let counterLobby = 0;
+        snapshot.forEach(childSnapshot => {
+          counterLobby++;
+          const lobby: Lobby = childSnapshot.val();
+          if (lobby.available) {
+            this.newGamerInLobby(keyGamer, counterLobby);
           } else {
-            this.newLobby(newGamer.$key);
+            this.newLobby(keyGamer, counterLobby);
           }
         });
+      } else {
+        this.newLobby(keyGamer, 0);
       }
     });
   }
 
-  newLobby(keyGamer: string): void {
-    this.firstLobby.gamers.push(keyGamer);
-    this.lobbyList.push(this.firstLobby);
+  newGamerInLobby(keyGamer: string, nLobby: number) {
+    this.firebase.database.ref(`lobbies/sala_${nLobby}`).once('value').then(snapshot => {
+      const selectedLobby = snapshot.val();
+      console.log(selectedLobby);
+    });
+
+    // this.firebase.database.ref(`gamers/sala_${nLobby}`).update({
+    //   available: this.firstLobby.available,
+    //   gamers: this.firstLobby.gamers,
+    //   maxGamer: this.firstLobby.maxGamer,
+    // });
+  }
+
+  newLobby(keyGamer: string, nLobby: number): void {
+    const listGamers = [];
+    listGamers.push(keyGamer);
+
+    const lobbyData = {
+      available: true,
+      gamers: listGamers,
+      maxGamer: 2,
+    };
+
+    const updates = {};
+    updates[`lobbies/sala_${nLobby + 1}`] = lobbyData;
+
+    this.firebase.database.ref().update(updates);
   }
 }
