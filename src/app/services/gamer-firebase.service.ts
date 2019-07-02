@@ -1,5 +1,5 @@
 import { Injectable } from '@angular/core';
-import { AngularFireDatabase } from '@angular/fire/database';
+import { AngularFireDatabase, AngularFireList } from '@angular/fire/database';
 import { Gamer } from '../models/gamer';
 import { LobbyFirebaseService } from 'src/app/services/lobby-firebase.service';
 import { Observable, Subscriber } from 'rxjs';
@@ -35,6 +35,15 @@ export class GamerFirebaseService {
           observer.next('');
         }
       );
+    });
+  }
+
+  findGamerByKey(keyGamer: string): Observable<Gamer> {
+    return Observable.create((observer: Subscriber<Gamer>) => {
+      this.firebase.object('gamers/' + keyGamer).valueChanges().subscribe((gamer: Gamer) => {
+        gamer.$key = keyGamer;
+        observer.next(gamer);
+      });
     });
   }
 }

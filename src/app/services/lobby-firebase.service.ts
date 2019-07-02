@@ -8,17 +8,25 @@ import { Observable, Subscriber } from 'rxjs';
 })
 export class LobbyFirebaseService {
 
-  refLobby: firebase.database.Reference;
+  private lobbyListSnapshot: AngularFireList<any>;
 
   constructor(
     private firebase: AngularFireDatabase,
   ) {
-    this.refLobby = this.firebase.database.ref().child('lobbies');
+    this.lobbyListSnapshot = this.firebase.list<Lobby>('lobbies');
+  }
+
+  listLobbySnapshot(): Observable<any> {
+    return this.lobbyListSnapshot.snapshotChanges();
+  }
+
+  lobbySnapshot(lobbyName: string): Observable<any> {
+    return this.firebase.object('lobbies/' + lobbyName).valueChanges();
   }
 
   connectAvailableLobby(keyGamer: string): Observable<string> {
     return Observable.create((observer: Subscriber<string>) => {
-      this.refLobby.once('value', snapshot => {
+      this.firebase.database.ref().child('lobbies').once('value', snapshot => {
         if (snapshot.numChildren() > 0) {
           let counterLobby = 0;
           snapshot.forEach(childSnapshot => {
@@ -29,9 +37,11 @@ export class LobbyFirebaseService {
                 observer.next(response);
               });
             } else {
-              this.newLobby(keyGamer, counterLobby).subscribe(response => {
-                observer.next(response);
-              });
+              if (snapshot.numChildren() === counterLobby) {
+                this.newLobby(keyGamer, counterLobby).subscribe(response => {
+                  observer.next(response);
+                });
+              }
             }
           });
         } else {
@@ -47,8 +57,10 @@ export class LobbyFirebaseService {
     return Observable.create((observer: Subscriber<string>) => {
       this.firebase.database.ref(`lobbies/sala_${nLobby}`).once('value').then(snapshot => {
         const selectedLobby: Lobby = snapshot.val();
+
         selectedLobby.gamers.push(keyGamer);
         selectedLobby.available = selectedLobby.maxGamer > selectedLobby.gamers.length;
+
         this.firebase.database.ref(`lobbies/sala_${nLobby}`).update(selectedLobby)
           .then(response => {
             observer.next(`sala_${nLobby}`);
@@ -76,8 +88,7 @@ export class LobbyFirebaseService {
 
       this.firebase.database.ref().update(updates)
         .then(response => {
-          console.log(response);
-          observer.next(`sala_${nLobby}`);
+          observer.next(`sala_${nLobby + 1}`);
         })
         .catch(error => {
           observer.next('');
