@@ -36,15 +36,11 @@ export class LobbyFirebaseService {
 
   newGamerInLobby(keyGamer: string, nLobby: number) {
     this.firebase.database.ref(`lobbies/sala_${nLobby}`).once('value').then(snapshot => {
-      const selectedLobby = snapshot.val();
-      console.log(selectedLobby);
+      const selectedLobby: Lobby = snapshot.val();
+      selectedLobby.gamers.push(keyGamer);
+      selectedLobby.available = selectedLobby.maxGamer > selectedLobby.gamers.length;
+      this.firebase.database.ref(`lobbies/sala_${nLobby}`).update(selectedLobby);
     });
-
-    // this.firebase.database.ref(`gamers/sala_${nLobby}`).update({
-    //   available: this.firstLobby.available,
-    //   gamers: this.firstLobby.gamers,
-    //   maxGamer: this.firstLobby.maxGamer,
-    // });
   }
 
   newLobby(keyGamer: string, nLobby: number): void {
