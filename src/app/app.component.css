@@ -3,3 +3,9 @@
 }
 
 .lh-condensed { line-height: 1.25; }
+
+app-footer {
+  position: absolute;
+  bottom: 0;
+  width: 100%;
+}
