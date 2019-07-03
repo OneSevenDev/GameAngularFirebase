@@ -80,7 +80,7 @@ export class LobbyFirebaseService {
       const lobbyData = {
         available: true,
         gamers: listGamers,
-        maxGamer: 2,
+        maxGamer: 3,
       };
 
       const updates = {};

@@ -55,7 +55,8 @@ export class SelectAvatarComponent implements OnInit {
       cancelButtonText: '<i class="fa fa-thumbs-down"></i>'
     }).then((result) => {
       if (result.value) {
-        this.newGamer.avatar = this.avatarSelected.$key;
+        this.newGamer.avatarKey = this.avatarSelected.$key;
+        this.newGamer.avatar = this.avatarSelected.img;
         this.newGamer.nick = result.value;
 
         this.gamerService.insertar(this.newGamer).subscribe(response => {

@@ -1,4 +1,20 @@
-<p>
-  lobby works!
-</p>
-<span *ngFor="let gamer of listGamer">{{gamer.nick}}</span>
+<div class="pt-5 text-center">
+  <h2>Sala de espera</h2>
+  <hr class="hr-separator">
+</div>
+<div class="row text-center">
+  <div class="col-sm-12" *ngFor="let gamer of listGamer">
+    <div class="row">
+      <div class="col-sm-4">
+        <i class="fa {{gamer.avatar}}" data-toggle="modal"></i>
+        <!-- <span *ngClass="{ 'currentGamer' : currentGamer.nick === gamer.nick}"> {{gamer.nick}},</span> -->
+        <span> Puntaje: {{gamer.score}}</span>
+      </div>
+      <div class="col-sm-8 pr-1">
+        <div class="progress">
+          <div class="progress-bar" role="progressbar" style="width: 25%" aria-valuenow="25" aria-valuemin="0" aria-valuemax="100"></div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>

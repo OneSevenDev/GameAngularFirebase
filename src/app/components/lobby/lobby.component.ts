@@ -15,6 +15,7 @@ export class LobbyComponent implements OnInit {
 
   refLobby: firebase.database.Reference;
   listGamer: Gamer[];
+  currentGamer: Gamer = new Gamer();
 
   constructor(
     private activateRouter: ActivatedRoute,
@@ -34,14 +35,21 @@ export class LobbyComponent implements OnInit {
       if (lobby && nick) {
         this.lobbyService.lobbySnapshot(lobby).subscribe( (response: Lobby) => {
           this.listGamer = [];
-          response.gamers.forEach( (element, index) => {
-            this.gamerService.findGamerByKey(element).subscribe((gamer: Gamer) => {
-              if (gamer) {
-                gamer.score = 0;
-                this.listGamer.push(gamer);
-              }
+          if (response) {
+            response.gamers.forEach( (element, index) => {
+              this.gamerService.findGamerByKey(element).subscribe((gamer: Gamer) => {
+                if (gamer) {
+                  gamer.score = 0;
+                  this.listGamer.push(gamer);
+
+                  // if (gamer.nick === nick) {
+                  //   this.currentGamer = gamer;
+                  //   console.log(this.currentGamer);
+                  // }
+                }
+              });
             });
-          });
+          }
         });
       }
     });

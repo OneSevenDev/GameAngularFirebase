@@ -24,6 +24,7 @@ export class GamerFirebaseService {
       this.firebase.database.ref('gamers/' + keyGamer).set({
         avatar: model.avatar,
         nick: model.nick,
+        avatarKey: model.avatarKey,
       });
 
       this.lobbyService.connectAvailableLobby(keyGamer).subscribe(
