@@ -33,6 +33,7 @@ export class LobbyComponent implements OnInit {
   viewBrowserGamer: string;
   selectQuestion: number;
   selectAltenativa: number;
+  percentageProgressbar: number;
 
   constructor(
     private activateRouter: ActivatedRoute,
@@ -47,6 +48,7 @@ export class LobbyComponent implements OnInit {
     this.hasResponded = false;
     this.timerDowngrade = '00:00';
     this.selectAltenativa = -1;
+    this.percentageProgressbar = 0;
     this.loadLobby();
   }
 
@@ -154,6 +156,7 @@ export class LobbyComponent implements OnInit {
 
     this.selectQuestion = nextQuestion === undefined ? 0 : nextQuestion;
     this.currentQuestion = this.listQuestions[this.selectQuestion];
+    this.percentageProgressbar = (this.selectQuestion + 1) * 100 / this.listQuestions.length;
     console.log('Respuesta correcta: ' + this.currentQuestion.answerOk);
 
     this.timerInterbalQuestion = setInterval(() => {
@@ -169,6 +172,7 @@ export class LobbyComponent implements OnInit {
 
       if (this.listQuestions[this.selectQuestion] !== undefined) {
         this.currentQuestion = this.listQuestions[this.selectQuestion];
+        this.percentageProgressbar = (this.selectQuestion + 1) * 100 / this.listQuestions.length;
         console.log('Respuesta correcta: ' + this.currentQuestion.answerOk);
       }
     }, environment.timerResponse * 1000);
