@@ -12,7 +12,7 @@
    },
   { 
     "question": "¿Qué tipo de animal es la ballena?",
-    "answerOk": 1,
+    "answerOk": 4,
     "alternative": [
       "Anfibio",
       "Crustaceo",

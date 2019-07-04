@@ -9,6 +9,7 @@ import { QuestionFirebaseService } from 'src/app/services/question-firebase.serv
 import { Question } from 'src/app/models/question';
 import Swal from 'sweetalert2';
 import { environment } from 'src/environments/environment';
+import { Observable, Subscriber } from 'rxjs';
 
 @Component({
   selector: 'app-lobby',
@@ -26,10 +27,12 @@ export class LobbyComponent implements OnInit {
   timerInterbalQuestion: any;
   timerClock: any;
   startGame: boolean;
+  hasResponded: boolean;
   showLoader: boolean;
   timerDowngrade: string;
   viewBrowserGamer: string;
   selectQuestion: number;
+  selectAltenativa: number;
 
   constructor(
     private activateRouter: ActivatedRoute,
@@ -41,7 +44,9 @@ export class LobbyComponent implements OnInit {
 
   ngOnInit() {
     this.startGame = false;
+    this.hasResponded = false;
     this.timerDowngrade = '00:00';
+    this.selectAltenativa = -1;
     this.loadLobby();
   }
 
@@ -50,16 +55,29 @@ export class LobbyComponent implements OnInit {
       const lobby = params['lobby'];
       const nick = this.viewBrowserGamer = params['nick'];
       if (lobby && nick) {
-        this.lobbyService.lobbySnapshot(lobby).subscribe( (response: Lobby) => {
+        this.lobbyService.lobbySnapshot(lobby).subscribe((response: Lobby) => {
           this.listGamer = [];
           if (response) {
             let counterGamersConnected = 0;
-            response.gamers.forEach( (element, index) => {
+            response.gamers.forEach((element, index) => {
               this.gamerService.findGamerByKey(element).subscribe((gamer: Gamer) => {
                 if (gamer) {
                   counterGamersConnected++;
-                  gamer.score = 0;
-                  this.listGamer.push(gamer);
+
+                  // Valida si se esta actualizando los datos
+                  // u obteniendo la lista de jugadores
+                  let updateOrInsert = false;
+
+                  this.listGamer.map(x => {
+                    if (x.$key === gamer.$key) {
+                      x.score = gamer.score;
+                      updateOrInsert = true;
+                    }
+                  });
+
+                  if (!updateOrInsert) {
+                    this.listGamer.push(gamer);
+                  }
 
                   if (gamer.nick === nick) {
                     this.currentGamer = gamer;
@@ -88,7 +106,7 @@ export class LobbyComponent implements OnInit {
       if (timerSecond === 3) {
         if (this.listQuestions.length > 0) {
           this.runQuestionTimer();
-          this.startAndResetTimer();
+          this.startOrResetTimer();
           this.startGame = true;
         }
         console.log('Go !');
@@ -129,13 +147,14 @@ export class LobbyComponent implements OnInit {
     });
   }
 
-  runQuestionTimer(nextQuestion: number) {
+  runQuestionTimer(nextQuestion?: number) {
     if (this.timerInterbalQuestion !== undefined) {
       clearInterval(this.timerInterbalQuestion);
     }
 
     this.selectQuestion = nextQuestion === undefined ? 0 : nextQuestion;
     this.currentQuestion = this.listQuestions[this.selectQuestion];
+    console.log('Respuesta correcta: ' + this.currentQuestion.answerOk);
 
     this.timerInterbalQuestion = setInterval(() => {
       console.log('ejecucion Nro: ' + this.selectQuestion);
@@ -144,25 +163,80 @@ export class LobbyComponent implements OnInit {
         console.log('Fin del juego !');
         clearInterval(this.timerInterbalQuestion);
         clearInterval(this.timerClock);
+        this.endGamer();
         this.timerDowngrade = '00:00';
       }
 
       if (this.listQuestions[this.selectQuestion] !== undefined) {
         this.currentQuestion = this.listQuestions[this.selectQuestion];
-        console.log(this.currentQuestion);
+        console.log('Respuesta correcta: ' + this.currentQuestion.answerOk);
       }
     }, environment.timerResponse * 1000);
   }
 
   sendResponse() {
     if (this.listQuestions.length > this.selectQuestion + 1) {
-      this.startAndResetTimer();
-      this.runQuestionTimer(this.selectQuestion + 1);
-      // suma puntaje
+      this.calculateScore().subscribe(response => {
+        this.startOrResetTimer();
+        this.runQuestionTimer(this.selectQuestion + 1);
+      });
+    } else {
+      this.calculateScore().subscribe(response => {
+        this.endGamer();
+        // TODO: termina el proceso
+      });
     }
   }
 
-  startAndResetTimer() {
+  endGamer(): void {
+    if (this.timerClock !== undefined) {
+      clearInterval(this.timerClock);
+    }
+    if (this.timerInterbalQuestion !== undefined) {
+      clearInterval(this.timerInterbalQuestion);
+    }
+    this.timerDowngrade = '00:00';
+    console.log('Fin del juego !');
+
+    Swal.fire({
+      title: 'Fin del juego. Ganador: [nombre]',
+      width: 600,
+      padding: '3em',
+      background: '#fff url(https://sweetalert2.github.io/images/trees.png)',
+      backdrop: `
+        rgba(0,0,123,0.4)
+        url("https://sweetalert2.github.io/images/nyan-cat.gif")
+        center left
+        no-repeat
+      `
+    });
+  }
+
+  calculateScore(): Observable<boolean> {
+    this.hasResponded = true;
+    let incrementPoint = 0;
+    return Observable.create((observer: Subscriber<boolean>) => {
+      if (this.validateAlternativeOk()) {
+        incrementPoint = 10;
+        console.log('Respondio correctamente');
+      } else {
+        incrementPoint = 0;
+        console.log('@@Mal !.. :c');
+      }
+      if (this.currentGamer !== undefined) {
+        this.gamerService.updateScore(this.currentGamer, incrementPoint).subscribe(
+          response => {
+            observer.next(response);
+          },
+          error => {
+            observer.next(false);
+          }
+        );
+      }
+    });
+  }
+
+  startOrResetTimer() {
     if (this.timerClock !== undefined) {
       clearInterval(this.timerClock);
     }
@@ -173,8 +247,20 @@ export class LobbyComponent implements OnInit {
       this.timerDowngrade = '00:0' + initTimer;
       if (initTimer === 0) {
         clearInterval(this.timerClock);
-        this.startAndResetTimer();
+        this.startOrResetTimer();
       }
     }, 1000);
+  }
+
+  validateAlternativeOk(): boolean {
+    console.log('se escogio la respuesta:' + this.selectAltenativa);
+    console.log('respuesta correcta:' + this.listQuestions[this.selectQuestion].answerOk);
+    return this.listQuestions[this.selectQuestion].answerOk === this.selectAltenativa || false;
+  }
+
+  isSelected(valueRadio: number) {
+    if (valueRadio !== undefined) {
+      this.selectAltenativa = valueRadio;
+    }
   }
 }

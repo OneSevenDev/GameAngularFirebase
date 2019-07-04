@@ -27,12 +27,23 @@
           <div class="card-body">
             <h5 class="card-title">{{currentQuestion.question}}</h5>
             <div class="form-check" *ngFor="let alternative of currentQuestion.alternative; let i = index">
-              <input *ngIf="currentGamer?.nick === viewBrowserGamer" class="form-check-input" type="radio" name="listAlternatives" id="radio_{{i}}" value="option_{{i}}">
+              <input *ngIf="currentGamer?.nick === viewBrowserGamer"
+                class="form-check-input"
+                type="radio"
+                name="listAlternatives"
+                id="radio_{{i}}"
+                (click)='isSelected(i)'
+                [value]='i'>
               <label class="form-check-label" for="radio_{{i}}">
                 {{alternative}}
               </label>
             </div>
-            <a (click)="sendResponse()" *ngIf="currentGamer?.nick === viewBrowserGamer" class="btn btn-primary">Enviar respuesta</a>
+            <a (click)="sendResponse()"
+              *ngIf="currentGamer?.nick === viewBrowserGamer"
+              class="btn btn-primary"
+              ngClass="{ 'btn': true, 'btn-primary': true, 'disabled': hasResponded }">
+              Enviar respuesta
+            </a>
           </div>
         </div>
       </div>

@@ -1,5 +1,5 @@
 export class Question {
   question: string;
-  answerOk: string;
+  answerOk: number;
   alternative: string[];
 }

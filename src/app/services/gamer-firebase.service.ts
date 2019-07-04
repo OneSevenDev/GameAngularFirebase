@@ -25,6 +25,7 @@ export class GamerFirebaseService {
         avatar: model.avatar,
         nick: model.nick,
         avatarKey: model.avatarKey,
+        score: 0,
       });
 
       this.lobbyService.connectAvailableLobby(keyGamer).subscribe(
@@ -44,6 +45,18 @@ export class GamerFirebaseService {
       this.firebase.object('gamers/' + keyGamer).valueChanges().subscribe((gamer: Gamer) => {
         gamer.$key = keyGamer;
         observer.next(gamer);
+      });
+    });
+  }
+
+  updateScore(gamer: Gamer, incrementPoints: number): Observable<boolean> {
+    return Observable.create((observer: Subscriber<boolean>) => {
+      this.firebase.database.ref('gamers/' + gamer.$key).update({
+        score: gamer.score + incrementPoints,
+      }).then(response => {
+        observer.next(true);
+      }).catch(error => {
+        observer.next(false);
       });
     });
   }
