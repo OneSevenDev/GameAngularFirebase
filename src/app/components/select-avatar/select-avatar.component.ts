@@ -5,6 +5,7 @@ import { Gamer } from 'src/app/models/gamer';
 import { Router } from '@angular/router';
 import Swal from 'sweetalert2';
 import { GamerFirebaseService } from 'src/app/services/gamer-firebase.service';
+import { AvatarFirebaseService } from 'src/app/services/avatar-firebase.service';
 
 @Component({
   selector: 'app-select-avatar',
@@ -19,6 +20,7 @@ export class SelectAvatarComponent implements OnInit {
 
   constructor(
     private coreFirebase: CoreFirebaseService,
+    private avatarService: AvatarFirebaseService,
     private router: Router,
     private gamerService: GamerFirebaseService,
   ) { }
@@ -28,10 +30,10 @@ export class SelectAvatarComponent implements OnInit {
   }
 
   loadAvatarts(): void {
-    this.coreFirebase.listAvatars().subscribe(response => {
+    this.avatarService.listAvatars().subscribe(response => {
       this.avataList = [];
       if (response.length === 0) {
-        this.coreFirebase.InsertavatartDefault();
+        this.coreFirebase.SetConfigInitialApp();
       } else {
         this.avataList = response.map(item => {
           return { $key: item.key, ...item.payload.val() };
@@ -62,7 +64,7 @@ export class SelectAvatarComponent implements OnInit {
         this.gamerService.insertar(this.newGamer).subscribe(response => {
           if (response !== '') {
             this.avatarSelected.available = false;
-            this.coreFirebase.update(this.avatarSelected);
+            this.avatarService.update(this.avatarSelected);
 
             this.router.navigate(['/lobby', response, this.newGamer.nick]);
 

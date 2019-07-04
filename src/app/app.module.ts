@@ -13,6 +13,8 @@ import { LobbyComponent } from './components/lobby/lobby.component';
 import { Routes, RouterModule } from '@angular/router';
 import { AngularFireModule } from '@angular/fire';
 import { AngularFireDatabaseModule } from '@angular/fire/database';
+import { AvatarFirebaseService } from './services/avatar-firebase.service';
+import { QuestionFirebaseService } from './services/question-firebase.service';
 
 const routes: Routes = [
   { path: '', redirectTo: '/players', pathMatch: 'full' },
@@ -38,7 +40,9 @@ const routes: Routes = [
   providers: [
     CoreFirebaseService,
     SettingsService,
-    GamerFirebaseService
+    GamerFirebaseService,
+    AvatarFirebaseService,
+    QuestionFirebaseService,
   ],
   bootstrap: [AppComponent]
 })

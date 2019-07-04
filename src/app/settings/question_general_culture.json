@@ -1,0 +1,112 @@
+[
+  { 
+    "question": "¿Quíen fue el primer presidente del Perú?",
+    "answerOk": "1",
+    "alternative": [
+      "José Bernardo de Tagle",
+      "José de la Riva Agüero",
+      "José de La Mar Cortázar",
+      "Agustín Gamarra Messia",
+      "Alejandro Toledo"
+    ]
+   },
+  { 
+    "question": "¿Qué tipo de animal es la ballena?",
+    "answerOk": "1",
+    "alternative": [
+      "Anfibio",
+      "Crustaceo",
+      "Pez",
+      "Molusco",
+      "Cetáceo"
+    ]
+   },
+  { 
+    "question": "¿En que año fue la independencia del Perú?",
+    "answerOk": "1",
+    "alternative": [
+      "28 de Julio de 1811",
+      "28 de Julio de 1821",
+      "28 de Julio de 1826",
+      "27 de Agosto de 1826",
+      "27 de Julio de 1826"
+    ]
+   },
+  { 
+    "question": "¿Cuál es el plato típico de Perú más reconocido?",
+    "answerOk": "4",
+    "alternative": [
+      "Anticuchos",
+      "Pollo a la Brasa",
+      "Causa Rellena",
+      "Ají de Gallina",
+      "Ceviche"
+    ]
+   },
+  { 
+    "question": "¿Quíen escribio tradiciones peruanas?",
+    "answerOk": "2",
+    "alternative": [
+      "Abraham Valdelomar",
+      "José María Arguedas",
+      "Ricardo Palma",
+      "César Vallejo",
+      "Ciro Alegría"
+    ]
+   },
+  { 
+    "question": "Son ruinas turisticas del Perú:",
+    "answerOk": "4",
+    "alternative": [
+      "Wiñay Wayna, Coricancha, Orongo",
+      "Isla del Sol, Choquequirao, Cueva de las manos del Río Pedregoso",
+      "Llactapata, Sacsayhuaman, Pumapunku",
+      "Pisac, Ollantaytambo, Complejo de Kalasasaya",
+      "Coricancha, Machu Picchu, Wiñay Wayna"
+    ]
+   },
+  { 
+    "question": "¿Quíen canto por primera vez el himno del Perú?",
+    "answerOk": "1",
+    "alternative": [
+      "Juan Diego Flórez",
+      "María Parado de Bellido",
+      "Rosa Merino de Arenas",
+      "Melchor de Navarra",
+      "Angelino Medoro"
+    ]
+   },
+  { 
+    "question": "¿Cuantás regiones tiene el Perú?",
+    "answerOk": "0",
+    "alternative": [
+      "24",
+      "25",
+      "23",
+      "22",
+      "20"
+    ]
+   },
+  { 
+    "question": "¿Cuál es el nombre constitucional del 2019 en Perú",
+    "answerOk": "0",
+    "alternative": [
+      "Año de la lucha contra la corrupción e impunidad",
+      "Año del diálogo y la reconciliación Nacional",
+      "Año del buen servicio al iudadano",
+      "Año de la lucha contra los profugos del país",
+      "Año de la unión comunitaria"
+    ]
+   },
+  { 
+    "question": "¿Cuántos presidentes tuvo el Perú?",
+    "answerOk": "0",
+    "alternative": [
+      "61",
+      "52",
+      "28",
+      "87",
+      "17"
+    ]
+   }
+]
