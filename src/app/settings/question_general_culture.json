@@ -1,7 +1,7 @@
 [
   { 
     "question": "¿Quíen fue el primer presidente del Perú?",
-    "answerOk": "1",
+    "answerOk": 1,
     "alternative": [
       "José Bernardo de Tagle",
       "José de la Riva Agüero",
@@ -12,7 +12,7 @@
    },
   { 
     "question": "¿Qué tipo de animal es la ballena?",
-    "answerOk": "1",
+    "answerOk": 1,
     "alternative": [
       "Anfibio",
       "Crustaceo",
@@ -23,7 +23,7 @@
    },
   { 
     "question": "¿En que año fue la independencia del Perú?",
-    "answerOk": "1",
+    "answerOk": 1,
     "alternative": [
       "28 de Julio de 1811",
       "28 de Julio de 1821",
@@ -34,7 +34,7 @@
    },
   { 
     "question": "¿Cuál es el plato típico de Perú más reconocido?",
-    "answerOk": "4",
+    "answerOk": 4,
     "alternative": [
       "Anticuchos",
       "Pollo a la Brasa",
@@ -45,7 +45,7 @@
    },
   { 
     "question": "¿Quíen escribio tradiciones peruanas?",
-    "answerOk": "2",
+    "answerOk": 2,
     "alternative": [
       "Abraham Valdelomar",
       "José María Arguedas",
@@ -56,7 +56,7 @@
    },
   { 
     "question": "Son ruinas turisticas del Perú:",
-    "answerOk": "4",
+    "answerOk": 4,
     "alternative": [
       "Wiñay Wayna, Coricancha, Orongo",
       "Isla del Sol, Choquequirao, Cueva de las manos del Río Pedregoso",
@@ -67,7 +67,7 @@
    },
   { 
     "question": "¿Quíen canto por primera vez el himno del Perú?",
-    "answerOk": "1",
+    "answerOk": 1,
     "alternative": [
       "Juan Diego Flórez",
       "María Parado de Bellido",
@@ -78,7 +78,7 @@
    },
   { 
     "question": "¿Cuantás regiones tiene el Perú?",
-    "answerOk": "0",
+    "answerOk": 0,
     "alternative": [
       "24",
       "25",
@@ -89,7 +89,7 @@
    },
   { 
     "question": "¿Cuál es el nombre constitucional del 2019 en Perú",
-    "answerOk": "0",
+    "answerOk": 0,
     "alternative": [
       "Año de la lucha contra la corrupción e impunidad",
       "Año del diálogo y la reconciliación Nacional",
@@ -100,7 +100,7 @@
    },
   { 
     "question": "¿Cuántos presidentes tuvo el Perú?",
-    "answerOk": "0",
+    "answerOk": 0,
     "alternative": [
       "61",
       "52",

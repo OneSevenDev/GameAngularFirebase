@@ -2,6 +2,7 @@ import { Injectable } from '@angular/core';
 import { AngularFireDatabase, AngularFireList } from '@angular/fire/database';
 import { Lobby } from '../models/lobby';
 import { Observable, Subscriber } from 'rxjs';
+import { environment } from 'src/environments/environment';
 
 @Injectable({
   providedIn: 'root'
@@ -80,7 +81,7 @@ export class LobbyFirebaseService {
       const lobbyData = {
         available: true,
         gamers: listGamers,
-        maxGamer: 3,
+        maxGamer: environment.maxGamer,
       };
 
       const updates = {};

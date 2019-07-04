@@ -48,15 +48,15 @@ export class CoreFirebaseService {
     const updates = {};
 
     lstQuestions.forEach((element) => {
-      counterQuestion++;
-
       const question: Question = new Question();
       question.question = element.question;
       question.answerOk = element.answerOk;
       question.alternative = element.alternative;
 
       newListQuestion.push(question);
-      updates[`questions/question_${counterQuestion}`] = question;
+      updates[`questions/${counterQuestion}`] = question;
+
+      counterQuestion++;
     });
 
 

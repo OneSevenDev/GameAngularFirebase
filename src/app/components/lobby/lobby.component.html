@@ -7,17 +7,45 @@
     <div class="row">
       <div class="col-sm-4" [ngClass]="{ 'currentGamer' : currentGamer.nick === gamer.nick, 'text-left': true}">
         <i class="fa {{gamer.avatar}}"></i>
-        <span> {{gamer.nick}},</span>
-        <span> Puntaje: {{gamer.score}}</span>
+        <span> {{gamer.nick}} </span>
+        <span class="badge badge-primary badge-pill">{{gamer.score}}</span>
       </div>
       <div class="col-sm-8">
         <div class="progress">
-          <div class="progress-bar" role="progressbar" [style.width.%]="gamer.score" aria-valuenow="0" aria-valuemin="0" aria-valuemax="100"></div>
+          <div class="progress-bar progress-bar-striped progress-bar-animated" role="progressbar" [style.width.%]="gamer.score" aria-valuenow="0" aria-valuemin="0" aria-valuemax="100">{{gamer.score}}</div>
+        </div>
+      </div>
+    </div>
+  </div>
+  <div class="col-sm-12 pt-2">
+    <hr class="hr-separator-inverse">
+  </div>
+  <div *ngIf="startGame" class="col-sm-12 pt-2">
+    <div class="row">
+      <div class="col-sm-8">
+        <div class="card">
+          <div class="card-body">
+            <h5 class="card-title">{{currentQuestion.question}}</h5>
+            <div class="form-check" *ngFor="let alternative of currentQuestion.alternative; let i = index">
+              <input *ngIf="currentGamer?.nick === viewBrowserGamer" class="form-check-input" type="radio" name="listAlternatives" id="radio_{{i}}" value="option_{{i}}">
+              <label class="form-check-label" for="radio_{{i}}">
+                {{alternative}}
+              </label>
+            </div>
+            <a (click)="sendResponse()" *ngIf="currentGamer?.nick === viewBrowserGamer" class="btn btn-primary">Enviar respuesta</a>
+          </div>
+        </div>
+      </div>
+      <div class="col-sm-4">
+        <div class="card">
+          <div class="card-body">
+            <span class="digit text-nowrap font-digit">{{timerDowngrade}}</span>
+          </div>
         </div>
       </div>
     </div>
   </div>
 </div>
-<div *ngIf="startGame" class="loading">
+<div *ngIf="showLoader" class="loading">
   <i class="fa fa-spinner fa-pulse fa-5x fa-fw"></i>
 </div>

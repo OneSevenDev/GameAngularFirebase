@@ -1,6 +1,6 @@
 import { Injectable } from '@angular/core';
 import { AngularFireDatabase, AngularFireList } from '@angular/fire/database';
-import { Observable } from 'rxjs';
+import { Observable, Subscriber } from 'rxjs';
 import { Question } from '../models/question';
 
 @Injectable({
@@ -17,10 +17,20 @@ export class QuestionFirebaseService {
   }
 
   listQuestions(): Observable<any> {
-    return this.questionList.snapshotChanges();
-  }
-
-  insertar(model: Question) {
-    this.questionList.push(model);
+    return Observable.create((observer: Subscriber<Question[]>) => {
+      this.firebase.database.ref(`questions`).once('value')
+      .then(snapshot => {
+        const list: Question[] = snapshot.val();
+        if (list && list.length > 0) {
+          observer.next(list);
+        } else {
+          observer.next(undefined);
+        }
+      })
+      .catch( error => {
+        console.log(error);
+        observer.next(undefined);
+      });
+    });
   }
 }

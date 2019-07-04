@@ -6,3 +6,13 @@
   top: 50%;
   left: 50%;
 }
+.digit {
+  color: rgb(85, 85, 85);
+  font-size: 90px;
+}
+.font-digit {
+  font-family: sans-serif;
+}
+.text-nowrap {
+  white-space: nowrap;
+}
